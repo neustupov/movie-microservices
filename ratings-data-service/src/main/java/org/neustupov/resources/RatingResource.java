@@ -15,15 +15,15 @@ public class RatingResource {
 
   @GetMapping("/{movieId}")
   public Rating getRating(@PathVariable("movieId") String movieId){
-    return new Rating(movieId, 1);
+    return new Rating(movieId, 1.0);
   }
 
   @GetMapping("/users/{userId}")
   public UserRating getUserRating(@PathVariable("userId") String userId){
 
     List<Rating> ratings = Arrays.asList(
-        new Rating("1", 5),
-        new Rating("2", 4)
+        new Rating("500", 5.0),
+        new Rating("600", 4.0)
     );
     return new UserRating(ratings);
   }

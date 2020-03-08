@@ -31,7 +31,7 @@ public class MovieCatalogResource {
   @GetMapping("/{userId}")
   public List<CatalogItem> getCatalog(@PathVariable("userId") String userId){
 
-    log.info("Request to: http://localhost:8092/ratingsdata/users/" + userId);
+    log.info("Request to: http://ratings-data-service/ratingsdata/users/" + userId);
     UserRating userRating = webClientbuilder.build()
         .get()
         .uri("http://ratings-data-service/ratingsdata/users/" + userId)
@@ -40,7 +40,7 @@ public class MovieCatalogResource {
         .block();
 
     return userRating.getUserRatings().stream().map(rating -> {
-      log.info("Request to: http://localhost:8091/movies/" + rating.getMovieId());
+      log.info("Request to: http://movie-info-service/movies/" + rating.getMovieId());
 
       Movie movie = webClientbuilder.build()
           .get()
@@ -49,7 +49,7 @@ public class MovieCatalogResource {
           .bodyToMono(Movie.class)
           .block();
 
-      return new CatalogItem(movie.getName(), "Some describe", rating.getRating());
+      return new CatalogItem(movie.getTitle(), movie.getOverview(), movie.getVote_average());
     }).collect(
         Collectors.toList());
   }
