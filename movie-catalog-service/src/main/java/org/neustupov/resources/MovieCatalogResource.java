@@ -1,6 +1,8 @@
 package org.neustupov.resources;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
@@ -36,6 +38,7 @@ public class MovieCatalogResource {
   }
 
   @GetMapping("/{userId}")
+  @HystrixCommand(fallbackMethod = "getFallbackCatalog")
   public List<CatalogItem> getCatalog(@PathVariable("userId") String userId){
 
     log.info("Request to: " + RATINGS_DATA_SERVICE_USERS_URI + userId);
@@ -75,5 +78,9 @@ public class MovieCatalogResource {
       return new CatalogItem(movie.getTitle(), movie.getOverview(), movie.getVote_average());
     }).collect(
         Collectors.toList());
+  }
+
+  public List<CatalogItem> getFallbackCatalog(@PathVariable("userId") String userId){
+    return Arrays.asList(new CatalogItem("No movie", "", 0D));
   }
 }
