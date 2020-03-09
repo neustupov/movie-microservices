@@ -1,6 +1,7 @@
 package org.neustupov.services;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import java.time.Duration;
 import lombok.extern.log4j.Log4j2;
 import org.neustupov.models.CatalogItem;
@@ -28,7 +29,13 @@ public class MovieInfo {
     this.webClientbuilder = webClientbuilder;
   }
 
-  @HystrixCommand(fallbackMethod = "getFallbackCatalogItem")
+  @HystrixCommand(fallbackMethod = "getFallbackCatalogItem",
+  commandProperties = {
+      @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
+      @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),
+      @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+      @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000")
+  })
   public CatalogItem getCatalogItem(Rating rating){
 
     log.info("Request to: " + MOVIE_INFO_SERVICE_MOVIES_URI + rating.getMovieId());

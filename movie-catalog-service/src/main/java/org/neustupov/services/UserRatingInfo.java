@@ -1,6 +1,7 @@
 package org.neustupov.services;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import java.time.Duration;
 import java.util.Collections;
 import lombok.extern.log4j.Log4j2;
@@ -28,7 +29,13 @@ public class UserRatingInfo {
     this.webClientbuilder = webClientbuilder;
   }
 
-  @HystrixCommand(fallbackMethod = "getFallbackUserRating")
+  @HystrixCommand(fallbackMethod = "getFallbackUserRating",
+      commandProperties = {
+          @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
+          @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),
+          @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+          @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000")
+      })
   public UserRating getUserRating(String userId){
 
     log.info("Request to: " + RATINGS_DATA_SERVICE_USERS_URI + userId);
