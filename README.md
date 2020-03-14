@@ -4,3 +4,4 @@
 #### Reactive Web - Spring WebFlux
 #### Discovery Server - Eureka
 #### Control the interactions between distributed services - Netflix Hystrix
+#### DB - Mongo
