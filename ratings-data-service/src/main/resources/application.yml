@@ -6,4 +6,6 @@ spring:
     name: ratings-data-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/ratingdb
+      host: localhost
+      port: 27017
+      database: rating
