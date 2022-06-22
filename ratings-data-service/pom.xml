@@ -17,7 +17,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>Hoxton.SR3</spring-cloud.version>
-		<mongodb-driver-sync.version>3.11.0</mongodb-driver-sync.version>
+		<mongodb-driver-sync.version>3.11.3</mongodb-driver-sync.version>
 	</properties>
 
 	<dependencies>
